@@ -36,16 +36,20 @@ pipeline {
                       apiVersion: apps/v1
                       kind: Deployment
                       metadata:
-                        name: moodle
+                        name: moodle-ci
                       spec:
                         replicas: 1
                         selector:
                           matchLabels:
-                            app: moodle
+                            app: moodle-ci
+                       ports:
+                         -port: 8080
+                          targetPort: 8080
+                          nodePort: 31080
                         template:
                           metadata:
                             labels:
-                              app: moodle
+                              app: moodle-ci
                           spec:
                             containers:
                             - name: moodle
