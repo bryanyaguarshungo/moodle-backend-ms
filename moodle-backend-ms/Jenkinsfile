@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+    environment {
+        IMAGE = "bryanyaguarshungo/moodle-backend:${env.BUILD_NUMBER}"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/bryanyaguarshungo/moodle-backend-ms.git'
+            }
+        }
+
+        stage('Build Docker image') {
+            steps {
+                script {
+                    docker.build("${IMAGE}")
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('', 'docker-hub') {
+                        docker.image("${IMAGE}").push()
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'k3s-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh '''
+                      cat <<EOF | kubectl apply -f -
+                      apiVersion: apps/v1
+                      kind: Deployment
+                      metadata:
+                        name: moodle
+                      spec:
+                        replicas: 1
+                        selector:
+                          matchLabels:
+                            app: moodle
+                        template:
+                          metadata:
+                            labels:
+                              app: moodle
+                          spec:
+                            containers:
+                            - name: moodle
+                              image: ${IMAGE}
+                              ports:
+                              - containerPort: 8080
+                      EOF
+                    '''
+                }
+            }
+        }
+    }
+}
