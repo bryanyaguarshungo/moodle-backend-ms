@@ -79,7 +79,7 @@ EOF
 
         stage('Smoke Test') {
             steps {
-                withCredentials([file(credentialsId: 'k3s-kubeconfig', variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'Jenkinsfile', variable: 'KUBECONFIG')]) {
                     sh 'kubectl get svc moodle-ci'
                 }
             }
