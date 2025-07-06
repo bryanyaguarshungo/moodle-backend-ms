@@ -30,7 +30,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([file(credentialsId: 'k3s-kubeconfig', variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'Jenkinsfile', variable: 'KUBECONFIG')]) {
                     sh '''
                     kubectl delete deployment moodle-ci || true
 
