@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/bryanyaguarshungo/moodle-backend-ms.git'
+                git branch: 'main', url: 'https://github.com/bryanyaguarshungo/moodle-backend-ms.git'
             }
         }
 
@@ -51,7 +51,7 @@ spec:
     spec:
       containers:
       - name: moodle
-        image: bryanyaguarshungo/moodle-backend:latest
+        image: ${IMAGE}
         ports:
         - containerPort: 8080
 EOF
