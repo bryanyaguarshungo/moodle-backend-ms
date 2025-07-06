@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        IMAGE = "bryanyaguarshungo/moodle-backend:ci-${env.BUILD_NUMBER}"
+        IMAGE = "bryanyaguarshungo/moodle-backend:latest"
     }
     stages {
         stage('Checkout') {
@@ -51,7 +51,7 @@ spec:
     spec:
       containers:
       - name: moodle
-        image: ${IMAGE}
+        image: bryanyaguarshungo/moodle-backend:latest
         ports:
         - containerPort: 8080
 EOF
