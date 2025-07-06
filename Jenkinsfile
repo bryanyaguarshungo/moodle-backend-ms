@@ -13,7 +13,7 @@ pipeline {
         stage('Build Docker image') {
             steps {
                 script {
-                    docker.build("${IMAGE}")
+                    docker.build("${IMAGE}", "moodle-backend-ms")
                 }
             }
         }
