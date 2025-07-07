@@ -66,7 +66,8 @@ spec:
   selector:
     app: moodle-ci
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
       nodePort: 31080
 EOF
@@ -79,7 +80,7 @@ EOF
 
         stage('Smoke Test') {
             steps {
-                withCredentials([file(credentialsId: 'Jenkinsfile', variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh 'kubectl get svc moodle-ci'
                 }
             }
